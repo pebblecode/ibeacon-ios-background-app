@@ -1,0 +1,3 @@
+rootProject.name = 'c2cble'
+
+include ':app'
