@@ -125,8 +125,16 @@
 #pragma mark - Networking
 
 - (void)sendRequestWithRegion:(CLBeaconRegion *)region andAction:(NSString *)action {
-  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/bg/?userID=testUser&deviceID=testDevice&regionID=%@&regionName=%@&action=%@&timestamp=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date]] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  
+  CLLocationCoordinate2D coords = [[[self locationManager] location] coordinate];
+  NSString *lat = [[NSNumber numberWithFloat:coords.latitude] stringValue];
+  NSString *lng = [[NSNumber numberWithFloat:coords.longitude] stringValue];
+  
+  
+  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/bg/?userID=testUser&deviceID=testDevice&regionID=%@&regionName=%@&action=%@&timestamp=%@&lat=%@&lng=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date], lat, lng] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  
   NSURL *requestUrl = [NSURL URLWithString:requestString];
+  
   NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
   [NSURLConnection sendAsynchronousRequest:request
                                      queue:[NSOperationQueue mainQueue]
