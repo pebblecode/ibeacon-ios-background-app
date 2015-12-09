@@ -130,8 +130,8 @@
   NSString *lat = [[NSNumber numberWithFloat:coords.latitude] stringValue];
   NSString *lng = [[NSNumber numberWithFloat:coords.longitude] stringValue];
   
-  
-  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/bg/?userID=testUser&deviceID=testDevice&regionID=%@&regionName=%@&action=%@&timestamp=%@&lat=%@&lng=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date], lat, lng] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  //&lat=%@&lng=%@
+  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/event?userId=testUser&deviceId=testDevice&regionId=%@&regionName=%@&action=%@&timestamp=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date], lat, lng] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
   
   NSURL *requestUrl = [NSURL URLWithString:requestString];
   
