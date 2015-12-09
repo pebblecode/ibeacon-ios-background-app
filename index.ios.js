@@ -18,7 +18,7 @@ var {
 var Beacons = require('react-native-ibeacon');
 
 // Request for authorization while the app is open
-Beacons.requestWhenInUseAuthorization();
+Beacons.requestAlwaysAuthorization();
 
 var region = {
   identifier: 'jaalee',

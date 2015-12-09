@@ -41,6 +41,11 @@
   if([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"]){
     
   }
+
+  [self startMonitoringRegion:[[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"C5893190-8A93-42EE-975B-F20080DD982B"] identifier: @"jaalee"]];
+  
+  
+  [self.locationManager startMonitoringSignificantLocationChanges];
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. The static bundle is automatically
@@ -61,5 +66,78 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
+
+
+
+#pragma mark - Getters
+
+- (CLLocationManager *)locationManager {
+  if (!_locationManager) {
+    _locationManager = [CLLocationManager new];
+    _locationManager.delegate = self;
+  }
+  return _locationManager;
+}
+
+
+#pragma mark - Add/Remove Beacons
+
+- (void)startMonitoringRegion:(CLBeaconRegion *)region {
+  [self.locationManager startMonitoringForRegion:region];
+  [self.locationManager startRangingBeaconsInRegion:region];
+}
+
+- (void)stopMonitoringRegion:(CLBeaconRegion *)region {
+  [self.locationManager stopMonitoringForRegion:region];
+  [self.locationManager stopRangingBeaconsInRegion:region];
+}
+
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+  for (CLBeacon *beacon in beacons) {
+    [[NSNotificationCenter defaultCenter]
+      postNotificationName:@"TestNotification"
+        object:self];
+  }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+  if ([region isKindOfClass:[CLBeaconRegion class]]) {
+    [self sendRequestWithRegion:(CLBeaconRegion *)region andAction:@"enter"];
+    UILocalNotification *localNotification = [UILocalNotification new];
+    localNotification.alertBody = [NSString stringWithFormat:@"Did enter region: %@", region.identifier];
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+  }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+  if ([region isKindOfClass:[CLBeaconRegion class]]) {
+    [self sendRequestWithRegion:(CLBeaconRegion *)region andAction:@"exit"];
+    UILocalNotification *localNotification = [UILocalNotification new];
+    localNotification.alertBody = [NSString stringWithFormat:@"Did exit region: %@", region.identifier];
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+  }
+}
+
+
+#pragma mark - Networking
+
+- (void)sendRequestWithRegion:(CLBeaconRegion *)region andAction:(NSString *)action {
+  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/bg/?userID=testUser&deviceID=testDevice&regionID=%@&regionName=%@&action=%@&timestamp=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date]] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  NSURL *requestUrl = [NSURL URLWithString:requestString];
+  NSURLRequest *request = [NSURLRequest requestWithURL:requestUrl];
+  [NSURLConnection sendAsynchronousRequest:request
+                                     queue:[NSOperationQueue mainQueue]
+                         completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                           if (connectionError) {
+                             NSLog(@"Server request finished with error: %@", connectionError.localizedDescription);
+                           }
+                         }];
+}
+
+
+
 
 @end
