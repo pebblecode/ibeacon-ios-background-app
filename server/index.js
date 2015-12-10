@@ -53,18 +53,6 @@ server.route({
       }else{
         locations.push(location);
       }
-
-            // Object.assign(l, {
-            //   deviceId: location.deviceId,
-            //   regionName: location.regionName,
-            //   action: location.action,
-            //   timestamp: location.timestamp,
-            //   lat: location.lat,
-            //   lng: location.lng,
-            //   name: location.name
-            // });
-
-
       
       io.sockets.emit('locations', locations);
 

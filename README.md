@@ -30,6 +30,9 @@ http://stackoverflow.com/questions/31865234/ios-8-background-location-update-tri
 #WE're limited by Apples CoreLocation 20 ibeacon UUIDs per app.
 https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/LocationAwarenessPG/RegionMonitoring/RegionMonitoring.html
 
+but we can use major and minor values to increase the number of regions.
+
+
 ###Start
 1. ```npm i && open ios/c2cble.xcodeproj```
 2. Play button to debug on device. Simulator bluetooth doesn't exist, it needs to be a real device.
