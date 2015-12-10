@@ -4,19 +4,24 @@
   <title>C2C BLE</title>
   <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="https://hpneo.github.io/gmaps/styles.css">
 </head>
 <body>
   <h2> C2C BLE</h2>
   <div id="content"> There are currently no users </div>
-
+  <div id="map"></div>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="gmap.js"></script>
   <script>
-    var locations = [];
+    var locations = [],
+      map = null;
     var socket = io();
 
     socket.on('locations', function(data) {
       locations = data;
-
+      map.removeMarkers();
       if(locations.length){
         var content = document.getElementById('content');
         var list = document.createElement('ul');
@@ -37,7 +42,26 @@
       locationElement.innerText = 'User: ' + location.userId + ' Action:'+ location.action;
 
       parent.appendChild(locationElement);
+
+      if(location.action === 'enter'){
+        location.marker = map.addMarker({
+          lat: location.lat,
+          lng: location.lng,
+          title: location.name,
+          click: function(e) {
+            alert('You clicked '+location.name);
+          }
+        });
+      }
     } 
+
+    $(document).ready(function(){
+      map = new GMaps({
+        div: '#map',
+        lat: 51.4853388,
+        lng: -0.1186262
+      });
+    });
 
   </script>
 
