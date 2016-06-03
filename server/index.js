@@ -40,8 +40,8 @@ server.route({
         action: query.action,
         timestamp: query.timestamp
       };
+      console.log('request!', request.query)
 
-        
       const existingRecord = locations.find(l => {
         return l.userId === location.userId;
       });
@@ -49,11 +49,11 @@ server.route({
       if(existingRecord){
         existingRecord.deviceId = location.deviceId;
         existingRecord.timestamp = location.timestamp;
-        existingRecord.action = location.action;        
+        existingRecord.action = location.action;
       }else{
         locations.push(location);
       }
-      
+
       io.sockets.emit('locations', locations);
 
       reply();
@@ -72,6 +72,9 @@ server.route({
     }
 });
 
-server.start(() => {
+server.start((err) => {
+  if (err) {
+    return console.log('ERROR', err);
+  }
   console.log('Server running at:', server.info.uri);
 });

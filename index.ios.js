@@ -21,9 +21,15 @@ var Beacons = require('react-native-ibeacon');
 Beacons.requestAlwaysAuthorization();
 
 var region = {
-  identifier: 'jaalee',
-  uuid: 'C5893190-8A93-42EE-975B-F20080DD982B'  
+  identifier: 'Estimotes',
+  uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
 };
+
+// B9407F30-F5F8-466E-AFF9-25556B57FE6D
+//
+// major 36902
+//
+// minor 56288
 
 Beacons.startRangingBeaconsInRegion(region);
 
@@ -51,7 +57,7 @@ var c2cble = React.createClass({
           Welcome to C2C BLE!
         </Text>
         <Text style={styles.beaconText}>
-          {this.state.beacons.length > 0 ? 'Beacon Found' : 'Beacon Not Found'} 
+          {this.state.beacons.length > 0 ? 'Beacon Found' : 'Beacon Not Found'}
         </Text>
       </View>
     );

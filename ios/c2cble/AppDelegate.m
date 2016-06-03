@@ -36,13 +36,13 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://192.168.3.111:8081/index.ios.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.3.123:8081/index.ios.bundle?platform=ios&dev=true"];
 
   if([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"]){
     
   }
 
-  [self startMonitoringRegion:[[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"C5893190-8A93-42EE-975B-F20080DD982B"] identifier: @"jaalee"]];
+  [self startMonitoringRegion:[[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"] identifier: @"Estimotes"]];
   
   
   [self.locationManager startMonitoringSignificantLocationChanges];
@@ -131,7 +131,7 @@
   NSString *lng = [[NSNumber numberWithFloat:coords.longitude] stringValue];
   
   
-  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.111:3000/event?userId=testUser&deviceId=testDevice&regionId=%@&regionName=%@&action=%@&timestamp=%@&lat=%@&lng=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date], lat, lng] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  NSString *requestString = [[NSString stringWithFormat:@"http://192.168.3.123:3000/event?userId=testUser&deviceId=testDevice&regionId=%@&regionName=%@&action=%@&timestamp=%@&lat=%@&lng=%@", region.proximityUUID.UUIDString, region.identifier, action, [NSDate date], lat, lng] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
   
   NSURL *requestUrl = [NSURL URLWithString:requestString];
   
